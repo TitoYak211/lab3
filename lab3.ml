@@ -212,7 +212,10 @@ worry about explicitly handling the anomalous case when the two lists
 are of different lengths.)
 ......................................................................*)
 
-let zip =
+let rec zip (x : 'a list) (y : 'b list) : ('a * 'b) list =
+  match x, y with
+  | [], [] -> []
+  | xhd :: xtl, yhd :: ytl -> (xhd, yhd) :: (zip xtl ytl) ;;
   fun _ -> failwith "zip not implemented" ;;
 
 (*......................................................................
@@ -240,9 +243,10 @@ should be as polymorphic as possible?
 Now write the function.
 ......................................................................*)
    
-let partition =
-  fun _ -> failwith "partition not implemented" ;;
-
+let partition (condition : 'a -> bool) (lst : 'a list)
+            : 'a list * 'a list =
+  let open List in
+  filter condition lst, filter (fun x -> not (condition x)) lst ;;
 (*......................................................................
 Exercise 12: We can think of function application itself as a
 higher-order function (!). It takes two arguments -- a function and
@@ -282,5 +286,5 @@ Given the above, what should the type of the function "apply" be?
 Now write the function.
 ......................................................................*)
 
-let apply =
-  fun _ -> failwith "apply not implemented" ;;
+let apply (func : 'arg -> 'result) (arg : 'arg) : 'result =
+  func arg ;;
